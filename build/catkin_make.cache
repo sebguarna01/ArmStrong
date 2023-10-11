@@ -1,0 +1,2 @@
+mastering_ros_robot_description_pkg:robot_control_pkg:robot_model_pkg:traj_generator_pkg
+-DCATKIN_DEVEL_PREFIX=/home/jackmccann/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/jackmccann/catkin_ws/install -G Unix Makefiles

@@ -1,0 +1,8 @@
+prefix=/home/jackmccann/catkin_ws/install
+
+Name: traj_generator
+Description: Description of traj_generator
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

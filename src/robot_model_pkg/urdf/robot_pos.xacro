@@ -1,0 +1,232 @@
+<?xml version="1.0"?>
+<robot name="robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<!-- model params -->
+
+<!-- geometry -->
+<xacro:property name="base_link_length" value="0.05"/>
+<xacro:property name="base_link_radius" value="0.2"/>
+
+<xacro:property name="shoulder_yaw_link_length" value="0.05"/>
+<xacro:property name="shoulder_yaw_link_radius" value="0.1"/>
+
+<xacro:property name="shoulder_pitch_link_length" value="0.5"/>
+<xacro:property name="shoulder_pitch_link_radius" value="0.04"/>
+
+<xacro:property name="elbow_link_length" value="0.5"/>
+<xacro:property name="elbow_link_radius" value="0.04"/>
+
+<xacro:property name="wrist_link_length" value="0.2"/>
+<xacro:property name="wrist_link_radius" value="0.03"/>
+
+<!-- joint limits -->
+<xacro:property name="limits_revolute_upper" value="3.14"/>
+<xacro:property name="limits_revolute_lower" value="-3.14"/>
+<xacro:property name="limits_revolute_velocity" value="1.57"/>
+<xacro:property name="limits_revolute_effort" value="300"/>
+
+
+<xacro:include filename="$(find robot_model_pkg)/urdf/robot_new.gazebo"/>
+
+<!-- links and joint definitions -->
+<!-- dummy link-joint to fix to world -->
+<link name="world"/>
+
+<joint name="world_fixed_joint" type="fixed">
+  <parent link="world"/>
+  <child link="base_link"/> 
+</joint>
+
+<!-- robot -->
+<link name="base_link">
+    <visual>
+        <geometry>
+            <cylinder length="${base_link_length}" radius="${base_link_radius}"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+    <collision>
+        <geometry>
+            <cylinder length="${base_link_length}" radius="${base_link_radius}"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="1"/>
+      <inertia ixx="30" ixy="0" ixz="0" iyy="30" iyz="0" izz="30"/>
+    </inertial>
+</link>
+
+<joint name="joint_1" type="continuous">
+    <parent link="base_link"/>
+    <child link="shoulder_yaw_link"/>
+    <origin xyz="0 0 ${base_link_length/2}"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="${limits_revolute_effort}"
+        velocity="${limits_revolute_velocity}"/> 
+    <dynamics damping="0.7"/>
+</joint>
+
+<link name="shoulder_yaw_link">
+    <visual>
+        <geometry>
+            <cylinder length="${shoulder_yaw_link_length}" 
+            radius="${shoulder_yaw_link_radius}"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0 0 ${shoulder_yaw_link_length/2}"/>
+    </visual>
+    <collision>
+        <geometry>
+            <cylinder length="${shoulder_yaw_link_length}" 
+            radius="${shoulder_yaw_link_radius}"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0 0 ${shoulder_yaw_link_length/2}"/>
+    </collision>
+    <inertial>
+        <origin rpy="0 0 0" xyz="0 0 ${shoulder_yaw_link_length/2}"/>
+        <mass value="1"/>
+        <inertia ixx="30" ixy="0" ixz="0" iyy="30" iyz="0" izz="30"/>
+    </inertial>
+</link>
+
+<joint name="joint_2" type="continuous">
+    <parent link="shoulder_yaw_link"/>
+    <child link="shoulder_pitch_link"/>
+    <origin xyz="0 0 ${shoulder_yaw_link_length}"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="${limits_revolute_effort}"
+        velocity="${limits_revolute_velocity}"/> 
+    <dynamics damping="0.7"/>
+</joint>
+
+<link name="shoulder_pitch_link">
+    <visual>
+        <geometry>
+            <cylinder length="${shoulder_pitch_link_length}" 
+            radius="${shoulder_pitch_link_radius}"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0 0 ${shoulder_pitch_link_length/2}"/>
+    </visual>
+    <collision>
+        <geometry>
+            <cylinder length="${shoulder_pitch_link_length}" 
+            radius="${shoulder_pitch_link_radius}"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0 0 ${shoulder_pitch_link_length/2}"/>
+    </collision>
+    <inertial>
+        <origin rpy="0 0 0" xyz="0 0 ${shoulder_pitch_link_length/2}"/>
+        <mass value="1"/>
+        <inertia ixx="30" ixy="0" ixz="0" iyy="30" iyz="0" izz="30"/>
+    </inertial>
+</link>
+
+<joint name="joint_3" type="continuous">
+    <parent link="shoulder_pitch_link"/>
+    <child link="elbow_link"/>
+    <origin xyz="0 0 ${shoulder_pitch_link_length}"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="${limits_revolute_effort}"
+        velocity="${limits_revolute_velocity}"/>
+    <dynamics damping="0.7"/>
+</joint>
+
+<link name="elbow_link">
+    <visual>
+        <geometry>
+            <cylinder length="${elbow_link_length}" 
+            radius="${elbow_link_radius}"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0 0 ${elbow_link_length/2}"/>
+    </visual>
+    <collision>
+        <geometry>
+            <cylinder length="${elbow_link_length}" 
+            radius="${elbow_link_radius}"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0 0 ${elbow_link_length/2}"/>
+    </collision>
+    <inertial>
+        <origin rpy="0 0 0" xyz="0 0 ${elbow_link_length/2}"/>
+        <mass value="1"/>
+        <inertia ixx="30" ixy="0" ixz="0" iyy="30" iyz="0" izz="30"/>
+    </inertial>
+</link>
+
+<joint name="joint_4" type="continuous">
+    <parent link="elbow_link"/>
+    <child link="wrist_link"/>
+    <origin xyz="0 0 ${elbow_link_length}"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="${limits_revolute_effort}"
+        velocity="${limits_revolute_velocity}"/> 
+    <dynamics damping="0.7"/>
+</joint>
+
+<link name="wrist_link">
+    <visual>
+        <geometry>
+            <cylinder length="${wrist_link_length}" 
+            radius="${wrist_link_radius}"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0 0 ${wrist_link_length/2}"/>
+    </visual>
+    <collision>
+        <geometry>
+            <cylinder length="${wrist_link_length}" 
+            radius="${wrist_link_radius}"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0 0 ${wrist_link_length/2}"/>
+    </collision>
+    <inertial>
+        <origin rpy="0 0 0" xyz="0 0 ${wrist_link_length/2}"/>
+        <mass value="1"/>
+        <inertia ixx="30" ixy="0" ixz="0" iyy="30" iyz="0" izz="30"/>
+    </inertial>
+</link>
+
+<transmission name="tran1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_1">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor1">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+</transmission>
+
+<transmission name="tran2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_2">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor2">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+</transmission>
+
+<transmission name="tran3">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_3">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor3">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+</transmission>
+
+<transmission name="tran4">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_4">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor4">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+</transmission>
+
+</robot>
