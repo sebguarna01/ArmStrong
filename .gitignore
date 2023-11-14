@@ -2,3 +2,4 @@ ros_venv/
 .vscode/
 build/
 devel/
+*.stl
