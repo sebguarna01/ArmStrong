@@ -1,8 +1,8 @@
-# Install script for directory: /home/jackmccann/catkin_ws/src/robot_model_pkg
+# Install script for directory: /home/kian/projects/uni/dmms/ArmStrong/src/robot_model_pkg
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/jackmccann/catkin_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/kian/projects/uni/dmms/ArmStrong/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -29,7 +29,7 @@ endif()
 
 # Install shared libraries without execute permission?
 if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
-  set(CMAKE_INSTALL_SO_NO_EXE "1")
+  set(CMAKE_INSTALL_SO_NO_EXE "0")
 endif()
 
 # Is this installation the result of a crosscompile?
@@ -37,18 +37,23 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
   set(CMAKE_CROSSCOMPILING "FALSE")
 endif()
 
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/jackmccann/catkin_ws/build/robot_model_pkg/catkin_generated/installspace/robot_model_pkg.pc")
+# Set default install directory permissions.
+if(NOT DEFINED CMAKE_OBJDUMP)
+  set(CMAKE_OBJDUMP "/usr/bin/objdump")
 endif()
 
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/kian/projects/uni/dmms/ArmStrong/build/robot_model_pkg/catkin_generated/installspace/robot_model_pkg.pc")
+endif()
+
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/robot_model_pkg/cmake" TYPE FILE FILES
-    "/home/jackmccann/catkin_ws/build/robot_model_pkg/catkin_generated/installspace/robot_model_pkgConfig.cmake"
-    "/home/jackmccann/catkin_ws/build/robot_model_pkg/catkin_generated/installspace/robot_model_pkgConfig-version.cmake"
+    "/home/kian/projects/uni/dmms/ArmStrong/build/robot_model_pkg/catkin_generated/installspace/robot_model_pkgConfig.cmake"
+    "/home/kian/projects/uni/dmms/ArmStrong/build/robot_model_pkg/catkin_generated/installspace/robot_model_pkgConfig-version.cmake"
     )
 endif()
 
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/robot_model_pkg" TYPE FILE FILES "/home/jackmccann/catkin_ws/src/robot_model_pkg/package.xml")
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/robot_model_pkg" TYPE FILE FILES "/home/kian/projects/uni/dmms/ArmStrong/src/robot_model_pkg/package.xml")
 endif()
 

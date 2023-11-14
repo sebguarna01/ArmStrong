@@ -1,0 +1,7 @@
+FROM osrf/ros:melodic-desktop-full
+
+COPY . /app
+
+WORKDIR /app
+
+RUN echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc

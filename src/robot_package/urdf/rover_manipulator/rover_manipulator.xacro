@@ -1,0 +1,375 @@
+<?xml version="1.0"?>
+<robot name="rover"
+  xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find robot_package)/urdf/rover_manipulator/utils/materials.xacro" />
+  <xacro:include filename="$(find robot_package)/urdf/rover_manipulator/utils/macros.xacro" />
+
+  <xacro:property name="PI" value="3.1415926535897931"/>
+  <xacro:property name="mass" value="1" />
+  <xacro:property name="width" value="1"/>
+  <xacro:property name="height" value="1" />
+
+  <!-- New dummy root link -->
+  <link name="dummy_root_link">
+    <inertial>
+      <mass value="0.0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+  </link>
+
+  <!-- Fixed joint connecting dummy root to original root -->
+  <joint name="fixed_joint" type="fixed">
+    <parent link="dummy_root_link"/>
+    <child link="manipulator_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="manipulator_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_package/urdf/rover_manipulator/meshes/visual/manipulator_link.stl"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="${mass}"/>
+      <xacro:box_inertia mass="${mass}" width="${width}" height="${height}" />
+    </inertial>
+  </link>
+
+  <link name="shoulder_pan_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_package/urdf/rover_manipulator/meshes/visual/shoulder_pan_link.stl"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="${mass}"/>
+      <xacro:box_inertia mass="${mass}" width="${width}" height="${height}" />
+    </inertial>
+  </link>
+
+  <link name="shoulder_tilt_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_package/urdf/rover_manipulator/meshes/visual/shoulder_tilt_link.stl"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="${mass}"/>
+      <xacro:box_inertia mass="${mass}" width="${width}" height="${height}" />
+    </inertial>
+  </link>
+
+  <link name="elbow_tilt_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_package/urdf/rover_manipulator/meshes/visual/elbow_tilt_link.stl"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="${mass}"/>
+      <xacro:box_inertia mass="${mass}" width="${width}" height="${height}" />
+    </inertial>
+  </link>
+
+  <link name="wrist_tilt_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_package/urdf/rover_manipulator/meshes/visual/wrist_tilt_link.stl"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="${mass}"/>
+      <xacro:box_inertia mass="${mass}" width="${width}" height="${height}" />
+    </inertial>
+  </link>
+
+  <link name="wrist_yaw_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_package/urdf/rover_manipulator/meshes/visual/wrist_yaw_link.stl"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="${mass}"/>
+      <xacro:box_inertia mass="${mass}" width="${width}" height="${height}" />
+    </inertial>
+  </link>
+
+  <link name="l_gripper_inner_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_package/urdf/rover_manipulator/meshes/visual/l_gripper_inner_link.stl"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="${mass}"/>
+      <xacro:box_inertia mass="${mass}" width="${width}" height="${height}" />
+    </inertial>
+  </link>
+
+  <link name="l_gripper_outer_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_package/urdf/rover_manipulator/meshes/visual/l_gripper_outer_link.stl"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="${mass}"/>
+      <xacro:box_inertia mass="${mass}" width="${width}" height="${height}" />
+    </inertial>
+  </link>
+
+  <link name="l_gripper_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_package/urdf/rover_manipulator/meshes/visual/l_finger_link.stl"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="${mass}"/>
+      <xacro:box_inertia mass="${mass}" width="${width}" height="${height}" />
+    </inertial>
+  </link>
+
+  <link name="r_gripper_inner_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 ${PI} 0"/>
+      <geometry>
+        <mesh filename="package://robot_package/urdf/rover_manipulator/meshes/visual/r_gripper_inner_link.stl"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="${mass}"/>
+      <xacro:box_inertia mass="${mass}" width="${width}" height="${height}" />
+    </inertial>
+  </link>
+
+  <link name="r_gripper_outer_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_package/urdf/rover_manipulator/meshes/visual/r_gripper_outer_link.stl"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="${mass}"/>
+      <xacro:box_inertia mass="${mass}" width="${width}" height="${height}" />
+    </inertial>
+  </link>
+
+
+  <link name="r_gripper_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_package/urdf/rover_manipulator/meshes/visual/r_finger_link.stl"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="${mass}"/>
+      <xacro:box_inertia mass="${mass}" width="${width}" height="${height}" />
+    </inertial>
+  </link>
+
+  <joint name="joint0" type="revolute">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="manipulator_link"/>
+    <child link="shoulder_pan_link"/>
+    <axis xyz="0 0 1.0"/>
+    <limit lower="-3.14" upper="3.14" effort="30" velocity="1.0"/>
+    <dynamics damping="0.7"/>
+  </joint>
+
+  <joint name="joint1" type="revolute">
+    <origin xyz="0.0015 0 0.09" rpy="0 0 0"/>
+    <parent link="shoulder_pan_link"/>
+    <child link="shoulder_tilt_link"/>
+    <axis xyz="1.0 0 0"/>
+    <limit lower="${-PI / 2}" upper="${PI / 2}" effort="30" velocity="1.0"/>
+    <dynamics damping="0.7"/>
+  </joint>
+
+  <joint name="joint2" type="revolute">
+    <origin xyz="-0.00131 0 0.52453" rpy="${PI / 2} 0 0"/>
+    <parent link="shoulder_tilt_link"/>
+    <child link="elbow_tilt_link"/>
+    <axis xyz="1.0 0 0"/>
+    <!-- <limit lower="-2.5" upper="2.5" effort="30" velocity="1.0"/> -->
+    <limit lower="${-PI - 0.79}" upper="0.79" effort="30" velocity="1.0"/>
+    <dynamics damping="0.7"/>
+  </joint>
+
+  <joint name="joint3" type="revolute">
+    <origin xyz="0.00019 0 0.52149" rpy="${PI / 2} 0 0"/>
+    <parent link="elbow_tilt_link"/>
+    <child link="wrist_tilt_link"/>
+    <axis xyz="1.0 0 0"/>
+    <!-- <limit lower="${-PI / 2}" upper="${PI / 2}" effort="30" velocity="1.0"/> -->
+    <limit lower="${-PI}" upper="0" effort="30" velocity="1.0"/>
+    <dynamics damping="0.7"/>
+  </joint>
+
+  <joint name="joint4" type="revolute">
+    <origin xyz="-0.00038 0 0.0897" rpy="0 0 0"/>
+    <parent link="wrist_tilt_link"/>
+    <child link="wrist_yaw_link"/>
+    <axis xyz="0 0 1.0"/>
+    <limit lower="-2.64" upper="2.64" effort="30" velocity="1.0"/>
+    <dynamics damping="0.7"/>
+  </joint>
+
+
+  <joint name="l_gripper_joint" type="revolute">
+    <origin xyz="0.03865 0 0" rpy="0 ${-PI / 2} 0"/>
+    <parent link="wrist_yaw_link"/>
+    <child link="l_gripper_outer_link"/>
+    <axis xyz="0 1.0 0"/>
+    <limit lower="-0.4" upper="1" effort="30" velocity="1.0"/>
+  </joint>
+
+  <joint name="r_gripper_joint" type="revolute">
+    <origin xyz="-0.03865 0 0" rpy="0 ${-PI / 2} -3.14159"/>
+    <parent link="wrist_yaw_link"/>
+    <child link="r_gripper_outer_link"/>
+    <axis xyz="0 1.0 0"/>
+    <limit lower="-0.4" upper="1" effort="30" velocity="1.0"/>
+  </joint>
+
+  <joint name="l_inner_gripper_joint" type="revolute">
+    <origin xyz="0.01065 0 0" rpy="0 ${-PI / 2} 0"/>
+    <parent link="wrist_yaw_link"/>
+    <child link="l_gripper_inner_link"/>
+    <axis xyz="0 -1.0 0"/>
+    <limit lower="-3.14" upper="3.14" effort="30" velocity="1.0"/>
+    <mimic joint="l_gripper_joint" multiplier="-1" offset="0" />
+  </joint>
+
+  <joint name="r_inner_gripper_joint" type="revolute">
+    <origin xyz="-0.01065 0 0" rpy="0 ${-PI / 2} -3.14159"/>
+    <parent link="wrist_yaw_link"/>
+    <child link="r_gripper_inner_link"/>
+    <axis xyz="0 -1.0 0"/>
+    <limit lower="-3.14" upper="3.14" effort="30" velocity="1.0"/>
+    <mimic joint="r_gripper_joint" multiplier="-1" offset="${pi}" />
+  </joint>
+
+  <joint name="l_finger_joint" type="revolute">
+    <origin xyz="${0.037 + 0.028} 0 0" rpy="0 ${PI / 2} 0"/>
+    <parent link="l_gripper_outer_link"/>
+    <child link="l_gripper_link"/>
+    <axis xyz="0 1.0 0"/>
+    <limit lower="-3.14" upper="3.14" effort="30" velocity="1.0"/>
+    <mimic joint="l_gripper_joint" multiplier="-1" offset="0" />
+  </joint>
+
+  <joint name="r_finger_joint" type="revolute">
+    <origin xyz="${0.037 + 0.028} 0 0" rpy="0 ${PI / 2} 0"/>
+    <parent link="r_gripper_outer_link"/>
+    <child link="r_gripper_link"/>
+    <axis xyz="0 -1.0 0"/>
+    <mimic joint="r_gripper_joint" multiplier="1" offset="0" />
+    <limit lower="-3.14" upper="3.14" effort="30" velocity="1.0"/>
+  </joint>
+
+    <transmission name="tran0">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="joint0">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="motor0">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+  </transmission>
+
+  <transmission name="tran1">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="joint1">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="motor1">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+  </transmission>
+
+  <transmission name="tran2">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="joint2">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="motor2">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+  </transmission>
+
+  <transmission name="tran3">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="joint3">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="motor3">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+  </transmission>
+
+  <transmission name="tran4">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="joint4">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="motor4">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+  </transmission>
+
+
+</robot>

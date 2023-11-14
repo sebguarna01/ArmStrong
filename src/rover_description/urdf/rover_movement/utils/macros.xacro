@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+    <xacro:macro name="swaypivot" params="name lr">
+        <link name="${name}_swaypivot_link">
+            <visual>
+                <geometry>
+                    <mesh filename="package://rover_description/urdf/rover_movement/meshes/sway_pivot.dae"/>
+                </geometry>
+                <origin xyz="0 0 0" rpy="0 0 ${lr*pi/2}"/>
+            </visual>
+        </link>
+
+        <!-- <joint name="${name}_swaypivot_joint" type="revolute">
+            <parent link="chassis_link"/>
+            <child link="${name}_swaypivot_link"/>
+            <origin xyz="${lr*(chassis_width/2 + sway_pivot_depth/2 + sway_pivot_gap)} 0 0" rpy="0 0 0"/>
+            <axis xyz="1.0 0 0"/>
+            <limit effort="1000" velocity="1000" lower="${-pi * 0.25}" upper="${pi * 0.25}"/>
+        </joint> -->
+    </xacro:macro>
+
+    <xacro:macro name="leg" params="sway name fb lr tb">
+        <link name="${name}_leg_link">
+            <visual>
+                <geometry>
+                    <mesh filename="package://rover_description/urdf/rover_movement/meshes/bottom_link.dae"/>
+                </geometry>
+                <origin xyz="0 0 0" rpy="0 0 ${fb*pi/2}"/>
+            </visual>
+        </link>
+
+        <joint name="${sway}_swaypivot_${name}_upper_leg_joint" type="revolute">
+            <parent link="${sway}_swaypivot_link"/>
+            <child link="${name}_leg_link"/>
+            <origin xyz="0 ${fb*sway_pivot_hor_sep/2} ${tb*sway_pivot_vert_sep/2}" rpy="${-fb*pi*0.5} 0 0"/>
+            <axis xyz="${-fb*1.0} 0 0"/>
+            <!-- TODO: set variables to these limits -->
+            <limit effort="1000" velocity="1000" lower="-0.2" upper="0.65"/>
+        </joint>
+
+
+        <link name="${name}_upper_leg_mimic_link">
+            <visual>
+                <geometry>
+                    <mesh filename="package://rover_description/urdf/rover_movement/meshes/top_link.dae"/>
+                </geometry>
+                <origin xyz="0 0 0" rpy="0 0 ${fb*pi/2}"/>
+            </visual>
+        </link>
+
+        <joint name="${sway}_swaypivot_${name}_upper_leg_mimic_joint" type="revolute">
+            <parent link="${sway}_swaypivot_link"/>
+            <child link="${name}_upper_leg_mimic_link"/>
+            <origin xyz="0 ${fb*sway_pivot_hor_sep/2} ${-tb*sway_pivot_vert_sep/2}" rpy="${-fb*pi*0.5} 0 0"/>
+            <axis xyz="${-fb*1.0} 0 0"/>
+            <!-- dont change these limits -->
+            <limit effort="1000" velocity="1000" lower="-10" upper="10"/>
+            <mimic joint="${sway}_swaypivot_${name}_upper_leg_joint" multiplier="1" offset="0"/>
+        </joint>
+
+        <link name="${name}_steer_hub_link">
+            <visual>
+                <geometry>
+                    <mesh filename="package://rover_description/urdf/rover_movement/meshes/parallel_link.dae"/>
+                </geometry>
+                <origin xyz="0 0 0" rpy="0 0 ${fb*pi/2}"/>
+                <material name="black"/>
+            </visual>
+        </link>
+
+        <joint name="${name}_leg_to_${name}_steer_hub_joint" type="revolute">
+            <parent link="${name}_leg_link"/>
+            <child link="${name}_steer_hub_link"/>
+            <origin xyz="0 0 ${leg_length}" rpy="${-fb*pi * 0.5} 0 0"/>
+            <axis xyz="${-fb*1.0} 0 0"/>
+            <!-- dont change these limits -->
+            <limit effort="1000" velocity="1000" lower="-10" upper="10"/>
+            <mimic joint="${sway}_swaypivot_${name}_upper_leg_joint" multiplier="-1" offset="0"/>
+        </joint>
+
+        <link name="${name}_steer_link">
+            <visual>
+                <geometry>
+                    <mesh filename="package://rover_description/urdf/rover_movement/meshes/steer_hub.dae"/>
+                </geometry>
+                <origin xyz="0 0 0" rpy="0 ${pi} ${wheel_config*lr*pi/2}"/>
+                <material name="black"/>
+            </visual>
+        </link>
+
+        <joint name="${name}_leg_to_${name}_steer_joint" type="revolute">
+            <parent link="${name}_steer_hub_link"/>
+            <child link="${name}_steer_link"/>
+            <origin xyz="0 ${-fb*0.029} 0.02" rpy="0 0 0"/>
+            <axis xyz="0 0 ${fb*lr*1.0}"/>
+            <!-- dont change these limits -->
+            <limit effort="1000" velocity="1000" lower="${-2*pi}" upper="${2*pi}"/>
+        </joint>
+
+        <link name="${name}_wheel_link">
+            <visual>
+                <geometry>
+                    <mesh filename="package://rover_description/urdf/rover_movement/meshes/wheel.dae"/>
+                </geometry>
+                <origin xyz="0 0 0" rpy="0 0 ${wheel_config*lr*pi/2}"/>
+            </visual>
+            <collision>
+                <geometry>
+                    <cylinder length="${wheel_depth}" radius="${wheel_radius}"/>
+                </geometry>
+                <origin xyz="${lr*wheel_axial_offset} 0 0" rpy="0 ${wheel_config*lr*pi/2} 0"/>
+            </collision>
+        </link>
+
+        <joint name="${name}_wheel_joint" type="continuous">
+            <origin xyz="${wheel_config*lr*wheel_axial_offset} 0 ${steer_link_height}" rpy="0 0 0"/>
+            <parent link="${name}_steer_link"/>
+            <child link="${name}_wheel_link"/>
+        </joint>
+
+        <transmission name="${name}_wheel_trans" type="SimpleTransmission">
+            <type>transmission_interface/SimpleTransmission</type>
+            <actuator name="${name}_wheel_motor">
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+            <joint name="${name}_wheel_joint">
+                <hardwareInterface>VelocityJointInterface</hardwareInterface>
+            </joint>
+        </transmission>
+
+        <transmission name="${name}_steering_trans" type="SimpleTransmission">
+            <type>transmission_interface/SimpleTransmission</type>
+            <actuator name="${name}_steering_motor">
+                <hardwareInterface>PositionJointInterface</hardwareInterface>
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+            <joint name="${name}_leg_to_${name}_steer_joint">
+                <hardwareInterface>PositionJointInterface</hardwareInterface>
+            </joint>
+        </transmission>
+
+    </xacro:macro>
+
+
+</robot>

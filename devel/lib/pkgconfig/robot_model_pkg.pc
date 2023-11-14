@@ -1,4 +1,4 @@
-prefix=/home/jackmccann/catkin_ws/devel
+prefix=/home/kian/projects/uni/dmms/ArmStrong/devel
 
 Name: robot_model_pkg
 Description: Description of robot_model_pkg

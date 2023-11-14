@@ -1,0 +1,8 @@
+<launch>
+    <node name="controller_manager" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" ns="/robot/" args="joint_0_position_controller joint_1_position_controller joint_2_position_controller joint_3_position_controller joint_4_position_controller"/>
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+    respawn="false" output="screen" />
+    <rosparam file="$(find robot_controllers)/config/robot_controllers.yml" command="load"/>
+    <remap from="/joint_states" to="/robot/joint_states" />
+</launch>

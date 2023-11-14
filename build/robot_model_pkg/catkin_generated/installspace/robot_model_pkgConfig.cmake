@@ -67,14 +67,14 @@ set(robot_model_pkg_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(robot_model_pkg_SOURCE_PREFIX /home/jackmccann/catkin_ws/src/robot_model_pkg)
-  set(robot_model_pkg_DEVEL_PREFIX /home/jackmccann/catkin_ws/devel)
+  set(robot_model_pkg_SOURCE_PREFIX /home/kian/projects/uni/dmms/ArmStrong/src/robot_model_pkg)
+  set(robot_model_pkg_DEVEL_PREFIX /home/kian/projects/uni/dmms/ArmStrong/devel)
   set(robot_model_pkg_INSTALL_PREFIX "")
   set(robot_model_pkg_PREFIX ${robot_model_pkg_DEVEL_PREFIX})
 else()
   set(robot_model_pkg_SOURCE_PREFIX "")
   set(robot_model_pkg_DEVEL_PREFIX "")
-  set(robot_model_pkg_INSTALL_PREFIX /home/jackmccann/catkin_ws/install)
+  set(robot_model_pkg_INSTALL_PREFIX /home/kian/projects/uni/dmms/ArmStrong/install)
   set(robot_model_pkg_PREFIX ${robot_model_pkg_INSTALL_PREFIX})
 endif()
 
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/jackmccann/catkin_ws/install/lib;/home/jackmccann/catkin_ws/devel/lib;/opt/ros/melodic/lib)
+    foreach(path /home/kian/projects/uni/dmms/ArmStrong/install/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
@@ -211,7 +211,7 @@ foreach(depend ${depends})
   _unpack_libraries_with_build_configuration(robot_model_pkg_LIBRARIES ${robot_model_pkg_LIBRARIES})
 
   _list_append_unique(robot_model_pkg_LIBRARY_DIRS ${${robot_model_pkg_dep}_LIBRARY_DIRS})
-  list(APPEND robot_model_pkg_EXPORTED_TARGETS ${${robot_model_pkg_dep}_EXPORTED_TARGETS})
+  _list_append_deduplicate(robot_model_pkg_EXPORTED_TARGETS ${${robot_model_pkg_dep}_EXPORTED_TARGETS})
 endforeach()
 
 set(pkg_cfg_extras "")

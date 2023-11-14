@@ -1,0 +1,13 @@
+<launch>
+    <node pkg="robot_package" type="robot.py" name="robot" output="screen" />
+    <node pkg="robot_package" type="robot_controller.py" name="robot" output="screen" />
+    <arg name="gui" default="true"/>
+    <arg name="rvizconfig" default="$(find robot_package)/rviz/urdf.rviz"/>
+
+    <arg name="model" default="$(find robot_package)/urdf/rover/rover_manipulator_only.xacro"/>
+
+    <param name="robot_description" command="$(find xacro)/xacro $(arg model)"/>
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+</launch>
+
+

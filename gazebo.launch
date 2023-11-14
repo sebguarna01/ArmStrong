@@ -1,0 +1,4 @@
+<launch>
+    <include file="$(find robot_controllers)/launch/robot_controllers.launch" />
+    <include file="$(find robot_package)/launch/rover_manipulator.launch" />
+</launch>

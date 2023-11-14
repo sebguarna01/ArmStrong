@@ -1,0 +1,6 @@
+<launch>
+    <node pkg="handheld_controller_package" type="xbox_controller.py" name="xbox_controller" output="screen" />
+    <node pkg="robot_package" type="robot.py" name="robot" output="screen" />
+    <node pkg="robot_package" type="robot_controller.py" name="robot_controller" output="screen" />
+    <node pkg="joy" type="joy_node" name="joy_node" output="screen" />
+</launch>

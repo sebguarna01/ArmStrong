@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  ros-noetic:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - /dev/dri:/dev/dri
+    devices:
+      - "/dev/input/js0:/dev/input/js0"
+      - "/dev/input/event27:/dev/input/event27"
+    command: tail -f /dev/null

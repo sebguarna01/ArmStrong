@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<robot name="rover_base"
+    xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <xacro:include filename="$(find rover_description)/urdf/rover_movement/utils/params.xacro"/>
+    <xacro:include filename="$(find rover_description)/urdf/rover_movement/utils/macros.xacro"/>
+
+    <link name="chassis_link">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="package://rover_description/urdf/rover_movement/meshes/chassis.dae"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <xacro:swaypivot name="l" lr="${left}" />
+    <xacro:swaypivot name="r" lr="${right}" />
+
+    <joint name="l_swaypivot_joint" type="revolute">
+        <parent link="chassis_link"/>
+        <child link="l_swaypivot_link"/>
+        <origin xyz="${1*(chassis_width/2 + sway_pivot_depth/2 + sway_pivot_gap)} 0.0 0.0" rpy="0 0 0"/>
+        <axis xyz="1.0 0.0 0.0"/>
+        <limit effort="1000" velocity="1000" lower="${-pi * 0.25}" upper="${pi * 0.25}"/>
+    </joint>
+
+    <joint name="r_swaypivot_joint" type="revolute">
+        <parent link="chassis_link"/>
+        <child link="r_swaypivot_link"/>
+        <origin xyz="${-1*(chassis_width/2 + sway_pivot_depth/2 + sway_pivot_gap)} 0.0 0.0" rpy="0 0 0"/>
+        <axis xyz="1.0 0.0 0.0"/>
+        <limit effort="1000" velocity="1000" lower="${-pi * 0.25}" upper="${pi * 0.25}"/>
+        <mimic joint="l_swaypivot_joint" multiplier="-1" offset="0"/>
+    </joint>
+
+    <xacro:leg sway="r" name="fr" fb="${front}" lr="${right}" tb="${bottom}"/>
+    <xacro:leg sway="l" name="fl" fb="${front}" lr="${left}" tb="${bottom}"/>
+    <xacro:leg sway="r" name="br" fb="${back}" lr="${right}" tb="${bottom}"/>
+    <xacro:leg sway="l" name="bl" fb="${back}" lr="${left}" tb="${bottom}"/>
+
+</robot>

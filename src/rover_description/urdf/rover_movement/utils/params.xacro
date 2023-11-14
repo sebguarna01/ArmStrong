@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:property name="chassis_width" value="0.442"/>
+    <xacro:property name="chassis_length" value="0.650"/>
+    <xacro:property name="chassis_height" value="0.11"/>
+    <xacro:property name="chassis_mass" value="30"/>
+
+    <xacro:property name="sway_pivot_depth" value="0.042"/>
+    <xacro:property name="sway_pivot_gap" value="0.030"/>
+    <xacro:property name="sway_pivot_vert_sep" value="0.080"/>
+    <xacro:property name="sway_pivot_hor_sep" value="0.150"/>
+
+    <xacro:property name="leg_radius" value="0.015"/>
+    <xacro:property name="leg_length" value="0.300"/>
+    <xacro:property name="leg_rotation" value="0.400"/>
+    <xacro:property name="leg_mass" value="0.400"/>
+
+    <xacro:property name="steer_hub_width" value="0.028"/>
+    <xacro:property name="steer_hub_height" value="0.080"/>
+    <xacro:property name="steer_hub_depth" value="0.042"/>
+
+    <xacro:property name="steer_link_width" value="0.030"/>
+    <xacro:property name="steer_link_height" value="0.1835"/>
+    <xacro:property name="steer_link_depth" value="0.090"/>
+
+    <xacro:property name="lower_leg_radius" value="0.03"/>
+    <xacro:property name="lower_leg_length" value="0.1"/>
+    <xacro:property name="lower_leg_rotation" value="0.4"/>
+    <xacro:property name="lower_leg_mass" value="0.4"/>
+
+
+    <xacro:property name="wheel_radius" value="0.15"/>
+    <xacro:property name="wheel_depth" value="0.090"/>
+    <xacro:property name="wheel_axial_offset" value="${-wheel_depth/2}"/>
+    <xacro:property name="wheel_mass" value="1"/>
+
+    <!-- (-1) for wheel in, (1) for wheel out -->
+    <xacro:property name="wheel_config" value="-1"/>
+
+    <xacro:property name="front" value="1"/>
+    <xacro:property name="back" value="-1"/>
+    <xacro:property name="right" value="1"/>
+    <xacro:property name="left" value="-1"/>
+    <xacro:property name="top" value="1"/>
+    <xacro:property name="bottom" value="-1"/>
+</robot>

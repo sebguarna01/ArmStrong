@@ -7,4 +7,4 @@
 # new environment variables
 
 # modified environment variables
-export PWD='/home/jackmccann/catkin_ws/build'
+export PWD='/home/kian/projects/uni/dmms/ArmStrong/build'

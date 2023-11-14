@@ -1,0 +1,2 @@
+std_msgs/String string_data
+std_msgs/Float64MultiArray float_array_data
