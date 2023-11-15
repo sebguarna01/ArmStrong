@@ -1,4 +1,4 @@
-setup: source run_snc_project.sh
+setup: source ./init_project.sh
 
 todo:
  - probably change things to angle velocities
