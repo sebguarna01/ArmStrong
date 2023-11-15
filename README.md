@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 setup: source run_snc_project.sh
 
 todo:
@@ -7,3 +8,6 @@ todo:
 
 notes:
 Using cartesian control for end effector manipulation https://reachrobotics.com/blog/inverse-kinematics-and-cartesian-control/
+=======
+# ArmStrong
+>>>>>>> main
