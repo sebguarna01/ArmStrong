@@ -13,10 +13,9 @@
         <arg name="use_sim_time" value="$(arg use_sim_time)"/>
         <arg name="headless" value="$(arg headless)"/>
     </include> 
+
+    <param name="robot_description" command="$(find xacro)/xacro $(arg model)"/>
     <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false"
     output="screen" args="-urdf -model robot -param robot_description"/>
-    <param name="robot_description" command="$(find xacro)/xacro $(arg model)"/>
-    <param name="robot_description"
-    command="$(find xacro)/xacro --inorder '$(find robot_package)/urdf/rover_manipulator/rover_manipulator.xacro'"/>
     <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" /> -->
 </launch> 

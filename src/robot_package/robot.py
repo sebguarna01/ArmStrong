@@ -18,7 +18,7 @@ class Robot:
         # Initialise q and T
         self.end_effector_pose = np.eye(4)
         self.T = np.eye(4)
-        self.initial_joint_angles = [0, pi/2, 0, 0, 0]
+        self.initial_joint_angles = [0, 0, 0, 0, 0]
         self.initial_end_effector_pose = self.forward_kinematics(self.initial_joint_angles)
         self.current_joint_angles = self.initial_joint_angles
         self.current_end_effector_pose = self.forward_kinematics(self.current_joint_angles)
@@ -44,20 +44,20 @@ class Robot:
         return self.robot.fkine(q)
     
     def inverse_kinematics(self, T):
-        T, *_ = self.robot.ikine_LM(T, slimit=100)  # multiple solutions are possible, taking the first one
+        T, *_ = self.robot.ikine_LM(T, slimit=1)  # multiple solutions are possible, taking the first one
         return T
     
-    def move_cartesian(self):
+    def move_cartesian(self, delta_x, delta_y, delta_z):
         if self.joint_control_mode == 'individual':
             return
-        time_step = 0.1
+        time_step = 0.01
+        rospy.loginfo([delta_x, delta_y, delta_z])
         # dx may be impossible here
-        dx = self.delta_x * time_step * self.velocity_scale
-        dy = self.delta_y * time_step * self.velocity_scale
-        dz = self.delta_z * time_step * self.velocity_scale
+        dx = delta_x * time_step
+        dy = delta_y * time_step
+        dz = delta_z * time_step
         
         self.desired_end_effector_pose = self.current_end_effector_pose * transl(dx, dy, dz)
-
         self.desired_joint_angles = self.inverse_kinematics(self.desired_end_effector_pose)
         if self.desired_joint_angles is not None:
             self.current_end_effector_pose = self.desired_end_effector_pose
@@ -69,7 +69,7 @@ class Robot:
     def move_individual_joint(self, individual_joint_control_value):
         if self.joint_control_mode == 'cartesian':
             return
-        time_step = 0.1
+        time_step = 0.01
         joint_index = self.current_joint_index
         self.current_joint_angles[joint_index] += individual_joint_control_value * time_step
         min_angle, max_angle = self.robot.links[joint_index].qlim
@@ -78,14 +78,16 @@ class Robot:
         self.publish_joint_states()
     
     def cartesian_callback(self, msg):
-        self.delta_x = msg.data[0]
-        self.delta_y = msg.data[1]
-        self.delta_z = msg.data[2]
-        self.velocity_scale = msg.data[3]
+        delta_x = msg.data[0]
+        delta_y = msg.data[1]
+        delta_z = msg.data[2]
+        rospy.loginfo([delta_x, delta_y, delta_z])
+        self.move_cartesian(delta_x, delta_y, delta_z)
 
     def individual_joint_control_callback(self, msg):
-        individual_joint_control_value = msg.data
-        self.move_individual_joint(individual_joint_control_value)
+        if self.joint_control_mode == 'individual':
+            individual_joint_control_value = msg.data
+            self.move_individual_joint(individual_joint_control_value)
 
     def current_joint_index_callback(self, msg):
         self.current_joint_index = msg.data - 1
@@ -101,14 +103,6 @@ class Robot:
             joint_angle_msg.data = joint_angle
             publisher.publish(joint_angle_msg)
 
-    # def move_ikine(self):
-    #     num_steps = 100
-    #     for s in np.linspace(0, 1, num_steps):
-    #         intermediate_pose = SE3.interpolate(self.current_end_effector_pose, self.desired_end_effector_pose, s)
-    #         intermediate_joint_angles = self.inverse_kinematics(intermediate_pose)
-
-    #         current_end_effector_pose 
-
 if __name__ == "__main__":
     links = [
         rtb.DHLink(theta=0, d=0, a=0, alpha=0, offset=0, qlim=[-pi, pi]),
@@ -118,7 +112,3 @@ if __name__ == "__main__":
         rtb.DHLink(theta=0, d=0.0897, a=0, alpha=0, offset=0, qlim=[-2.64, 2.64])
     ]
     robot = Robot(links, name='robot')
-    rate = rospy.Rate(10)
-    while not rospy.is_shutdown():
-        robot.move_cartesian()
-        rate.sleep()

@@ -1,4 +1,4 @@
-wheel
+wheel==
 defusedxml
 catkin-pkg==1.0.0
 distro==1.8.0

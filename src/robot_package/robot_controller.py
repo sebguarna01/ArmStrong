@@ -9,7 +9,7 @@ class RobotController:
     def __init__(self):
         self.joint_control_mode = False
         self.current_joint = 0
-        self.joints_limit = 4
+        self.joints_limit = 5
         self.last_a_msg = 0
         self.dpad_last_msg_time = 0
         self.joint_mode_map = {False: "off", True: "on"}
@@ -36,7 +36,7 @@ class RobotController:
             self.current_joint -= 1
             self.dpad_last_msg_time = current_time
             if self.current_joint < 1:
-                self.current_joint = 4
+                self.current_joint = 5
             rospy.loginfo('current joint: %i', self.current_joint)
         current_joint_index_msg = Int8()
         current_joint_index_msg.data = self.current_joint
